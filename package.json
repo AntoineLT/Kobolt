@@ -1,0 +1,33 @@
+{
+  "name": "kobolt",
+  "version": "0.0.1",
+  "description": "A tool which contains multiple features",
+  "main": "src/main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AntoineLT/Kobolt.git"
+  },
+  "keywords": [
+    "electron",
+    "node",
+    "js"
+  ],
+  "author": {
+    "name": "Antoine LA TORRE",
+    "email": "antoine.latorre.61@gmail.com"
+  },
+  "license": "WTFPL",
+  "bugs": {
+    "url": "https://github.com/AntoineLT/Kobolt/issues"
+  },
+  "homepage": "https://github.com/AntoineLT/Kobolt#readme",
+  "devDependencies": {
+    "electron": "^2.0.6"
+  },
+  "dependencies": {
+    "i18n": "^0.8.3"
+  }
+}
