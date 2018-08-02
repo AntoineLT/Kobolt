@@ -20,7 +20,7 @@ i18n.configure({
 });
 
 // Crash report in case of bad behaviour
-app.setPath('temp', __dirname + '/temp');
+app.setPath('temp', __dirname + '/../temp');
 crashReporter.start({
   productName: 'TaskApp',
   companyName: 'xPlatform.rocks',
@@ -33,9 +33,9 @@ app.on('ready', () => {
     width,
     height
   } = electron.screen.getPrimaryDisplay().workAreaSize;
-  const trayIcon = new Tray('src/img/tray.png');
+  const trayIcon = new Tray(__dirname + '/img/tray.png');
   const win = new BrowserWindow({
-    icon: 'src/img/tray.png',
+    icon: __dirname + '/img/tray.png',
     width: 300,
     height: 500,
     resizable: false,

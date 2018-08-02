@@ -5,7 +5,7 @@
   "main": "src/main.js",
   "scripts": {
     "start": "./node_modules/.bin/electron .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "winBuild": "cd ./build && node createWinApp.js && cd ./windows/resources/app && npm install"
   },
   "repository": {
     "type": "git",
@@ -26,7 +26,9 @@
   },
   "homepage": "https://github.com/AntoineLT/Kobolt#readme",
   "devDependencies": {
-    "electron": "^2.0.6"
+    "electron": "^2.0.6",
+    "electron-winstaller": "^2.6.4",
+    "fs-extra": "^7.0.0"
   },
   "dependencies": {
     "i18n": "^0.8.3"
