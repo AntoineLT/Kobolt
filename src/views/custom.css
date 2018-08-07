@@ -1,13 +1,28 @@
+/* Override the btn focuas & active effects */
 .btn:focus, .btn:active {
   outline: none !important;
   box-shadow: none;
 }
 
-nav-footer>li>a {
-  padding-top: 5px !important;
-  padding-bottom: 5px !important;
+/* Custom CSS */
+.nav-footer>li>a {
+  padding-top: 2px !important;
+  padding-bottom: 2px !important;
 }
 
-nav-footer {
-  min-height: 32px !important
+.nav-footer {
+  min-height: 25px !important
+}
+
+.nav-footer-brand {
+  padding-top: 2px !important;
+  padding-bottom: 2px !important;
+}
+
+.navbar-light .nav-footer-brand {
+  color: rgba(0, 0, 0, 0.9);
+}
+
+.navbar-dark .nav-footer-brand {
+  color: #fff;
 }

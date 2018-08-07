@@ -34,7 +34,7 @@ app.on('ready', () => {
     height
   } = electron.screen.getPrimaryDisplay().workAreaSize;
   const trayIcon = new Tray(__dirname + '/img/tray.png');
-  const win = new BrowserWindow({
+  const mainWin = new BrowserWindow({
     icon: __dirname + '/img/tray.png',
     width: 300,
     height: 500,
@@ -45,9 +45,22 @@ app.on('ready', () => {
     skipTaskbar: true,
     frame: false
   });
-  win.setMenu(null);
-  win.loadURL(`file://${__dirname}/views/index.html`);
+  mainWin.setMenu(null);
+  mainWin.loadURL(`file://${__dirname}/views/index.html`);
+  mainWin.setPosition(width - mainWin.getSize()[0] - 1, height - mainWin.getSize()[1] - 1);
+  // mainWin.webContents.openDevTools();
 
+  const closeModal = new BrowserWindow({
+    parent: mainWin,
+    width: 280,
+    height: 136,
+    modal: true,
+    show: false,
+    frame: false
+  });
+  closeModal.setMenu(null);
+  closeModal.loadURL(`file://${__dirname}/views/closeModal.html`);
+  closeModal.setPosition(width - closeModal.getSize()[0] - 11, height - closeModal.getSize()[1] - 11);
 
   // Check if there is a hyphen inside app.getLocale() result
   // Delete everything after this hyphen if it exists
@@ -68,16 +81,15 @@ app.on('ready', () => {
     type: 'normal',
     label: i18n.__("tray.contextMenu.close"),
     click: () => {
-      app.quit();
+      closeModal.show();
     }
   }));
 
   trayIcon.on('click', () => {
-    win.setPosition(width - win.getSize()[0] - 1, height - win.getSize()[1] - 1);
-    if (!win.isVisible()) {
-      win.show();
+    if (!mainWin.isVisible()) {
+      mainWin.show();
     } else {
-      win.hide();
+      mainWin.hide();
     }
   });
 
@@ -89,7 +101,9 @@ app.on('ready', () => {
   });
 
   // Declare some event to trigger them later in HTML
-  ipcMain.on('clickReload', () => win.loadURL(`file://${__dirname}/views/index.html`));
-  ipcMain.on('clickMin', () => win.hide());
-  ipcMain.on('clickClose', () => app.quit());
+  ipcMain.on('clickReload', () => mainWin.loadURL(`file://${__dirname}/views/index.html`));
+  ipcMain.on('clickMin', () => mainWin.hide());
+  ipcMain.on('clickClose', () => closeModal.show());
+  ipcMain.on('cancelModal', () => closeModal.hide());
+  ipcMain.on('yesModal', () => app.quit());
 });
