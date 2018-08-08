@@ -1,7 +1,7 @@
 {
   "name": "kobolt",
-  "version": "0.0.7",
-  "description": "A tool which contains multiple features",
+  "version": "0.0.8",
+  "description": "Kobolt - A tool which (WILL) contains multiple features",
   "main": "src/main.js",
   "scripts": {
     "start": "./node_modules/.bin/electron .",
@@ -13,16 +13,14 @@
   },
   "build": {
     "appId": "com.alt.kobolt",
+    "electronVersion": "2.0.6",
     "win": {
-      "target": [
-        {
-          "target": "portable",
-          "arch": [
-            "x64",
-            "ia32"
-          ]
-        }
-      ]
+      "target": [{
+        "target": "portable",
+        "arch": [
+          "x64"
+        ]
+      }]
     }
   },
   "keywords": [
