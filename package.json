@@ -1,11 +1,11 @@
 {
   "name": "kobolt",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "A tool which contains multiple features",
   "main": "src/main.js",
   "scripts": {
     "start": "./node_modules/.bin/electron .",
-    "winBuild": "cd ./build && node createWinApp.js && cd ./windows/resources/app && npm install"
+    "build": "node ./build/packageApp.js"
   },
   "repository": {
     "type": "git",
@@ -27,8 +27,7 @@
   "homepage": "https://github.com/AntoineLT/Kobolt#readme",
   "devDependencies": {
     "electron": "^2.0.6",
-    "electron-winstaller": "^2.6.4",
-    "fs-extra": "^7.0.0"
+    "electron-packager": "^12.1.0"
   },
   "dependencies": {
     "bootstrap": "^4.1.3",
