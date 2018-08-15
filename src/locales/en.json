@@ -4,5 +4,17 @@
 			"close": "Close",
 			"restart": "Restart"
 		}
+	},
+	"session": {
+		"settings": "Settings",
+		"validateUrl": "Validate",
+		"placeholderUrl": "confluence.example.com",
+		"login": "Log in",
+		"logout": "Log out",
+		"currentStatus": {
+			"notConfigured": "You need to configure your App!",
+			"notLogged": "Your are not logged!",
+			"logged": "Welcome "
+		}
 	}
 }

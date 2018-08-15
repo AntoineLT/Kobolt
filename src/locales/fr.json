@@ -4,5 +4,17 @@
 			"close": "Quitter",
 			"restart": "Redémarrer"
 		}
+	},
+	"session": {
+		"settings": "Préférences",
+		"validateUrl": "Valider",
+		"placeholderUrl": "confluence.exemple.com",
+		"login": "Se connecter",
+		"logout": "Se déconnecter",
+		"currentStatus": {
+			"notConfigured": "Vous devez configurer l'App !",
+			"notLogged": "Vous n'êtes pas connecté!",
+			"logged": "Bienvenue "
+		}
 	}
 }

@@ -1,0 +1,32 @@
+<div class="card-body pt-0 px-2 pb-3">
+  <h5 id="settingsTitle" class="card-title text-center"></h5>
+
+  <div class="input-group mb-3">
+    <input id="urlSession" type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="buttonSetURL">
+    <div class="input-group-append">
+      <button id="buttonValidateURL" class="btn btn-secondary" type="button"></button>
+    </div>
+  </div>
+
+  <button id="loginSession" class="btn btn-sm btn-primary" width="40" height="40">
+    <i class="fas fa-user-plus"></i>
+  </button>
+
+  <button id="logoutSession" class="btn btn-sm btn-danger float-right" width="40" height="40">
+    <i class="fas fa-user-times"></i>
+  </button>
+
+  <script>
+    // Translate variables:
+    $("#settingsTitle").append(i18n.__("session.settings"));
+    $("#urlSession").attr("placeholder", i18n.__("session.placeholderUrl"));
+    $("#buttonValidateURL").append(i18n.__("session.validateUrl"));
+    $("#loginSession").append(i18n.__("session.login"));
+    $("#logoutSession").append(i18n.__("session.logout"));
+
+    if ($("#urlSession").val() === "") {
+      $("#logoutSession").attr("disabled", "disabled");
+      $("#loginSession").attr("disabled", "disabled");
+    }
+  </script>
+</div>

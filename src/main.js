@@ -33,27 +33,29 @@ app.on('ready', () => {
     width,
     height
   } = electron.screen.getPrimaryDisplay().workAreaSize;
+
   const trayIcon = new Tray(__dirname + '/img/tray.png');
   const mainWin = new BrowserWindow({
     icon: __dirname + '/img/tray.png',
-    width: 300,
-    height: 500,
+    width: 350,
+    height: 550,
     resizable: false,
     minimizable: false,
-    show: false,
+    show: true,
     alwaysOnTop: true,
     skipTaskbar: true,
     frame: false
   });
   mainWin.setMenu(null);
   mainWin.loadURL(`file://${__dirname}/views/index.html`);
-  mainWin.setPosition(width - mainWin.getSize()[0] - 1, height - mainWin.getSize()[1] - 1);
+  mainWin.setPosition(width - mainWin.getSize()[0], height - mainWin.getSize()[1]);
   // mainWin.webContents.openDevTools();
 
   const closeModal = new BrowserWindow({
     parent: mainWin,
-    width: 280,
+    width: 330,
     height: 136,
+    resizable: false,
     modal: true,
     show: false,
     frame: false
