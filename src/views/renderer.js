@@ -4,7 +4,8 @@ const path = require('path');
 const i18n = require('i18n');
 const cheerio = require('cheerio');
 const {
-  ipcRenderer
+  ipcRenderer,
+  session
 } = require('electron');
 
 i18n.configure({
@@ -38,8 +39,36 @@ let dom = O.html();
 $('body').html(dom);
 
 // Add event listener to buttons click
-$('#nav_reload').click( () => { ipcRenderer.send('clickReload'); });
-$('#nav_min').click( () => { ipcRenderer.send('clickMin'); });
-$('#nav_close').click( () => { ipcRenderer.send('clickClose'); });
-// $('#cancelModal').click( () => { ipcRenderer.send('cancelModal'); });
-// $('#yesModal').click( () => { ipcRenderer.send('yesModal'); });
+$('#nav_reload').click(() => {
+  ipcRenderer.send('clickReload');
+  $("#urlSession").val(mainProcess.sessionUrl);
+});
+$('#nav_min').click(() => ipcRenderer.send('clickMin'));
+$('#nav_close').click(() => ipcRenderer.send('clickClose'));
+$("#loginSession").click(() => ipcRenderer.send('tryLogin'));
+$("#logoutSession").click(() => ipcRenderer.send('tryLogout'));
+$("#buttonValidateURL").click(() => {
+  ipcRenderer.send('updateUrl', "https://" + $("#urlSession").val());
+  getUser();
+});
+$("#goSomewhere").click(() => ipcRenderer.send('test'));
+
+const mainProcess = require('electron').remote.require('./main');
+$("#urlSession").val(mainProcess.sessionUrl);
+getUser();
+
+function getUser() {
+  mainProcess.currentUser((result) => {
+    if (result === i18n.__("session.currentStatus.notConfigured")) {
+      $("#footerUser").text(result);
+    } else if (result === "Anonymous") {
+      $("#footerUser").text(i18n.__("session.currentStatus.notLogged"));
+      $("#logoutSession").attr("disabled", "disabled");
+      $("#loginSession").removeAttr("disabled");
+    } else {
+      $("#footerUser").text(i18n.__("session.currentStatus.logged") + result);
+      $("#loginSession").attr("disabled", "disabled");
+      $("#logoutSession").removeAttr("disabled");
+    }
+  });
+}

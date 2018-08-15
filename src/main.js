@@ -8,8 +8,13 @@ const {
   Menu,
   MenuItem,
   ipcMain,
-  crashReporter
+  crashReporter,
+  session
 } = electron;
+const http = require("https");
+
+const db = require(__dirname + "/model/dataStore.js");
+db.initData();
 
 i18n.configure({
   locales: ['en', 'fr'],
@@ -51,6 +56,30 @@ app.on('ready', () => {
   mainWin.setPosition(width - mainWin.getSize()[0], height - mainWin.getSize()[1]);
   // mainWin.webContents.openDevTools();
 
+  const loginWin = new BrowserWindow({
+    icon: __dirname + '/img/tray.png',
+    width: 550,
+    height: 360,
+    resizable: false,
+    minimizable: false,
+    show: false,
+    alwaysOnTop: true,
+    skipTaskbar: true,
+    frame: false
+  });
+  loginWin.setMenu(null);
+  loginWin.loadURL(db.getUrl());
+  loginWin.webContents.on('did-get-redirect-request', () => {
+    if (loginWin.isVisible()) loginWin.hide();
+  });
+  // Remove scrollbars from loginWin web view
+  loginWin.webContents.on('dom-ready', (event) => {
+    loginWin.webContents.insertCSS('html,body{ overflow: hidden !important; }');
+  });
+  loginWin.on('hide', () => {
+    mainWin.loadURL(`file://${__dirname}/views/index.html`);
+  });
+
   const closeModal = new BrowserWindow({
     parent: mainWin,
     width: 330,
@@ -69,6 +98,7 @@ app.on('ready', () => {
   // Then set the i18n locale value with the one without hyphen
   var idx = app.getLocale().indexOf("-");
   (idx !== -1) ? i18n.setLocale(app.getLocale().slice(0, idx)): i18n.setLocale(app.getLocale());
+  // i18n.setLocale('fr');
 
   let contextMenu = new Menu();
   contextMenu.append(new MenuItem({
@@ -108,4 +138,68 @@ app.on('ready', () => {
   ipcMain.on('clickClose', () => closeModal.show());
   ipcMain.on('cancelModal', () => closeModal.hide());
   ipcMain.on('yesModal', () => app.quit());
+  ipcMain.on('updateUrl', (event, arg) => {
+    db.setUrl(arg);
+    loginWin.loadURL(db.getUrl());
+  });
+  ipcMain.on('tryLogin', () => loginWin.show());
+  ipcMain.on('tryLogout', () => session.defaultSession.clearStorageData({
+    storages: "cookies"
+  }, () => {
+    mainWin.loadURL(`file://${__dirname}/views/index.html`);
+    loginWin.loadURL(db.getUrl());
+  }));
+
+  ipcMain.on('test', () => mainWin.webContents.openDevTools());
+
+  exports.sessionUrl = db.getUrl().replace('https://', '');
+  exports.currentUser = (callback) => getCurrentUserName(callback);
+
+  // Return the current user logged in
+  function getCurrentUserName(callback) {
+    // How to call this function
+    // getCurrentUserName((result) => {
+    //   console.log(result);
+    // });
+
+    if (db.getUrl() !== "") {
+      let cookie = "";
+      session.defaultSession.cookies.get({}, (error, cookies) => {
+        // TODO: Improve the way of using cookies for the REST call
+        if (cookies.length > 0)
+          cookie = cookies[0]["name"] + "=" + cookies[0]["value"];
+
+        // TODO: Improve the way to get the hostname (through regexp?!)
+        const options = {
+          hostname: db.getUrl().replace('https://', '').replace('/', ''),
+          path: '/rest/api/user/current',
+          method: 'GET',
+          headers: {
+            Cookie: cookie,
+            'Content-Type': 'application/json'
+          }
+        };
+
+        let data = [];
+        const req = http.request(options, (res) => {
+          res.on("data", function(chunk) {
+            data.push(chunk);
+          });
+
+          res.on('end', () => {
+            data = Buffer.concat(data).toString();
+            data = JSON.parse(data).displayName;
+            callback(data);
+          });
+        });
+
+        req.on('error', (e) => {
+          console.error(e);
+        });
+        req.end();
+      });
+    } else {
+      callback(i18n.__("session.currentStatus.notConfigured"));
+    }
+  }
 });
