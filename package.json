@@ -1,6 +1,6 @@
 {
   "name": "kobolt",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Kobolt - A tool which (WILL) contains multiple features",
   "main": "src/main.js",
   "scripts": {
@@ -13,8 +13,9 @@
   },
   "build": {
     "appId": "com.alt.kobolt",
-    "electronVersion": "2.0.6",
+    "electronVersion": "3.0.4",
     "win": {
+      "icon": "./src/img/icon.png",
       "target": [
         {
           "target": "portable",
