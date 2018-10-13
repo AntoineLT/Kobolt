@@ -39,17 +39,37 @@ app.on('ready', () => {
     height
   } = electron.screen.getPrimaryDisplay().workAreaSize;
 
-  const trayIcon = new Tray(__dirname + '/img/tray.png');
-  const mainWin = new BrowserWindow({
-    icon: __dirname + '/img/tray.png',
-    width: 350,
-    height: 550,
+  const loadingScreen = new BrowserWindow({
+    transparent: true,
+    width: 150,
+    height: 150,
     resizable: false,
     minimizable: false,
     show: true,
     alwaysOnTop: true,
     skipTaskbar: true,
     frame: false
+  });
+  // loadingScreen.webContents.openDevTools();
+  loadingScreen.loadFile(`${__dirname}/views/html/loadingScreen.html`);
+
+  const trayIcon = new Tray(__dirname + '/img/tray.png');
+  const mainWin = new BrowserWindow({
+    icon: __dirname + '/img/tray.png',
+    width: 350,
+    height: 550,
+    minWidth: 350,
+    maxWidth: 350,
+    resizable: true,
+    minimizable: false,
+    show: false,
+    alwaysOnTop: true,
+    skipTaskbar: true,
+    frame: false
+  });
+  mainWin.on('ready-to-show', () => {
+    mainWin.show();
+    setTimeout(() => loadingScreen.close(), 250);
   });
   mainWin.setMenu(null);
   mainWin.loadURL(`file://${__dirname}/views/index.html`);
